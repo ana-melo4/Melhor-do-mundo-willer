@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Votação do Melhor do Mundo 2026</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚽</text></svg>">
+  
+  <!-- Fontes do Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome para ícones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Barra Superior de Navegação -->
+  <header class="cabecalho">
+    <div class="container container-cabecalho">
+      <div class="logo">
+        <i class="fa-solid fa-futbol"></i>
+        <div>
+          <h1>Melhor do Mundo</h1>
+          <span class="subtitulo-logo">Votação Oficial 2026</span>
+        </div>
+      </div>
+
+      <nav class="menu-navegacao">
+        <a href="#ranking"><i class="fa-solid fa-trophy"></i> Ranking</a>
+        <a href="#candidatos"><i class="fa-solid fa-users"></i> Jogadores</a>
+        <button id="btn-novo-jogador" class="btn btn-verde">
+          <i class="fa-solid fa-plus"></i> Adicionar Jogador
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Banner Inicial com Resumo -->
+  <section class="banner-apresentacao">
+    <div class="container">
+      <div class="cartao-apresentacao">
+        <h2>Escolha o melhor futebolista da temporada!</h2>
+        <p>
+          Vote no jogador que você acha que mais se destacou este ano. A cada clique,
+          o ranking e as porcentagens são recalculados automaticamente e salvos no navegador.
+        </p>
+
+        <!-- Indicadores rápidos -->
+        <div class="painel-resumo">
+          <div class="item-resumo">
+            <span class="numero-resumo" id="total-votos">0</span>
+            <span class="texto-resumo"><i class="fa-solid fa-check"></i> Total de Votos</span>
+          </div>
+          <div class="item-resumo destaque">
+            <span class="numero-resumo" id="nome-lider">Carregando...</span>
+            <span class="texto-resumo"><i class="fa-solid fa-crown"></i> Líder da Votação</span>
+          </div>
+          <div class="item-resumo">
+            <span class="numero-resumo" id="total-jogadores">0</span>
+            <span class="texto-resumo"><i class="fa-solid fa-shirt"></i> Concorrentes</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mensagem de Alerta Flutuante (Feedback de voto) -->
+  <div id="mensagem-alerta" class="alerta-sucesso" style="display: none;">
+    <i class="fa-solid fa-circle-check"></i>
+    <span id="texto-alerta">Voto registrado com sucesso!</span>
+  </div>
+
+  <main class="container">
+
+    <!-- Seção: Top 3 / Ranking dos Líderes -->
+    <section class="secao-ranking" id="ranking">
+      <div class="titulo-secao">
+        <h3><i class="fa-solid fa-medal"></i> Pódio dos Mais Votados</h3>
+        <p class="descricao-secao">Os três jogadores na liderança da disputa atual.</p>
+      </div>
+
+      <div class="cards-podio" id="container-podio">
+        <!-- Gerado via JavaScript -->
+      </div>
+    </section>
+
+    <!-- Seção: Todos os Candidatos com Filtros -->
+    <section class="secao-candidatos" id="candidatos">
+      <div class="titulo-secao">
+        <h3><i class="fa-solid fa-list-check"></i> Todos os Candidatos</h3>
+        <p class="descricao-secao">Clique no botão para votar no seu jogador favorito.</p>
+      </div>
+
+      <!-- Barra de Ferramentas: Busca e Filtros -->
+      <div class="barra-filtros">
+        <div class="campo-busca">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="input-pesquisa" placeholder="Buscar por jogador, clube ou país...">
+          <button id="btn-limpar-pesquisa" title="Limpar busca" style="display: none;">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div class="botoes-posicao" id="grupo-botoes-posicao">
+          <button class="btn-filtro ativo" data-pos="todas">Todos</button>
+          <button class="btn-filtro" data-pos="Atacante">Atacantes</button>
+          <button class="btn-filtro" data-pos="Meio-Campista">Meio-Campistas</button>
+          <button class="btn-filtro" data-pos="Defensor">Defensores</button>
+          <button class="btn-filtro" data-pos="Goleiro">Goleiros</button>
+        </div>
+
+        <div class="acoes-extras">
+          <select id="select-ordenar" class="select-ordenar">
+            <option value="votos">Mais Votados</option>
+            <option value="nome">Nome (A - Z)</option>
+          </select>
+          <button id="btn-zerar-votos" class="btn btn-vermelho" title="Zerar todos os votos">
+            <i class="fa-solid fa-trash-can"></i> Zerar
+          </button>
+        </div>
+      </div>
+
+      <!-- Lista de Jogadores em Cards -->
+      <div class="grid-jogadores" id="grid-jogadores">
+        <!-- Preenchido dinamicamente via JS -->
+      </div>
+
+      <!-- Mensagem quando não encontrar resultados -->
+      <div id="sem-resultados" class="caixa-sem-resultados" style="display: none;">
+        <i class="fa-regular fa-face-frown"></i>
+        <p>Nenhum jogador encontrado com esse termo.</p>
+        <button id="btn-redefinir-busca" class="btn btn-azul">Ver todos os jogadores</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal para Adicionar Novo Jogador -->
+  <div class="fundo-modal" id="modal-adicionar" style="display: none;">
+    <div class="janela-modal">
+      <div class="cabecalho-modal">
+        <h4><i class="fa-solid fa-user-plus"></i> Cadastrar Novo Jogador</h4>
+        <button id="btn-fechar-modal" class="btn-fechar" aria-label="Fechar">&times;</button>
+      </div>
+
+      <form id="form-novo-jogador" class="form-modal">
+        <div class="grupo-campo">
+          <label for="campo-nome">Nome do Jogador *</label>
+          <input type="text" id="campo-nome" required placeholder="Ex: Rodrigo Garro, Estêvão...">
+        </div>
+
+        <div class="linha-campos">
+          <div class="grupo-campo">
+            <label for="campo-clube">Clube Atual *</label>
+            <input type="text" id="campo-clube" required placeholder="Ex: Corinthians, Real Madrid...">
+          </div>
+
+          <div class="grupo-campo">
+            <label for="campo-pais">País / Seleção *</label>
+            <input type="text" id="campo-pais" required placeholder="Ex: Brasil, Argentina...">
+          </div>
+        </div>
+
+        <div class="grupo-campo">
+          <label for="campo-posicao">Posição *</label>
+          <select id="campo-posicao">
+            <option value="Atacante">Atacante</option>
+            <option value="Meio-Campista">Meio-Campista</option>
+            <option value="Defensor">Defensor / Zagueiro</option>
+            <option value="Goleiro">Goleiro</option>
+          </select>
+        </div>
+
+        <div class="grupo-campo">
+          <label for="campo-foto">Link da Foto (Opcional)</label>
+          <input type="url" id="campo-foto" placeholder="https://exemplo.com/foto.jpg">
+          <small class="ajuda-campo">Se não tiver foto, será gerado um avatar com as iniciais do atleta.</small>
+        </div>
+
+        <div class="rodape-modal">
+          <button type="button" id="btn-cancelar" class="btn btn-cinza">Cancelar</button>
+          <button type="submit" class="btn btn-verde"><i class="fa-solid fa-check"></i> Salvar e Votar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Rodapé do Site -->
+  <footer class="rodape">
+    <div class="container container-rodape">
+      <div class="info-projeto">
+        <p><strong>Votação do Melhor do Mundo &copy; 2026</strong></p>
+        <p>Trabalho prático desenvolvido para a disciplina de Desenvolvimento Web.</p>
+        <p class="nota-autoria">Autora: <strong>Ana</strong></p>
+      </div>
+      <div class="tecnologias-rodape">
+        <span><i class="fa-brands fa-html5"></i> HTML5</span>
+        <span><i class="fa-brands fa-css3-alt"></i> CSS3</span>
+        <span><i class="fa-brands fa-js"></i> JavaScript</span>
+        <span><i class="fa-solid fa-database"></i> LocalStorage</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
